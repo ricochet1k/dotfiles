@@ -68,6 +68,8 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'ErichDonGubler/vim-sublime-monokai'
+
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-eunuch'
@@ -124,6 +126,10 @@ let g:syntastic_check_on_wq = 0
 set laststatus=2
 " Use 256 colours (Use this setting only if your terminal supports 256 colours)
 set t_Co=256
+" Use truecolor only if your terminal can do RGB color
+"set termguicolors
+
+colorscheme sublimemonokai
 
 " All of your plugins must be added before the following line.
 
