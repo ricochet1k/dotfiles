@@ -6,10 +6,15 @@ hook global WinCreate ^[^*]+$ %{
     set-face window Whitespace rgb:333333
     }
 
+# Buffer switching
 map global normal <c-n> :buffer-next<ret>
 map global normal <c-p> :buffer-previous<ret>
 
+# Indent/dedent with tab
+map global insert <tab> '<a-;><gt>'
+map global insert <s-tab> '<a-;><lt>'
 
+# Close buffer with ,d
 map global user -docstring 'close current buffer' d ':delete-buffer<ret>'
 
 # Clipboard
