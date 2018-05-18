@@ -10,7 +10,7 @@ map global normal <c-n> :buffer-next<ret>
 map global normal <c-p> :buffer-previous<ret>
 
 
-map global user -docstring 'close current buffer' d ':delete_buffer<ret>'
+map global user -docstring 'close current buffer' d ':delete-buffer<ret>'
 
 # Clipboard
 map global user -docstring 'copy to system clipboard' y '<a-|>xsel --input --clipboard<ret>'
