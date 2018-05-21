@@ -2,8 +2,9 @@
 # Enable line numbers
 hook global WinCreate ^[^*]+$ %{
     add-highlighter window number_lines -hlcursor
-    add-highlighter window  show_whitespaces -tab '|' -tabpad '-' -spc ' ' -lf ' '
+    add-highlighter window show_whitespaces -tab '|' -tabpad '-' -spc ' ' -lf ' '
     set-face window Whitespace rgb:333333
+    add-highlighter window show_matching
     }
 
 # Buffer switching
@@ -16,6 +17,9 @@ map global insert <s-tab> '<a-;><lt>'
 
 # Close buffer with ,d
 map global user -docstring 'close current buffer' d ':delete-buffer<ret>'
+
+# Switch buffer with ,b
+map global user -docstring 'Switch buffer' b ':buffer '
 
 # Clipboard
 map global user -docstring 'copy to system clipboard' y '<a-|>xsel --input --clipboard<ret>'
