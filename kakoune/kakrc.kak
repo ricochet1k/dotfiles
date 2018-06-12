@@ -95,3 +95,9 @@ plug https://gitlab.com/Screwtapello/kakoune-cargo
 plug-colors alexherbo2/kakoune-dracula-theme
 
 colorscheme desertex
+
+# Language Server
+%sh{kak-lsp --kakoune -s $kak_session}
+lsp-start
+
+
