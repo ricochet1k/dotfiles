@@ -26,6 +26,9 @@ map global user -docstring 'copy to system clipboard' y '<a-|>xsel --input --cli
 map global user -docstring 'paste from system clipboard' P '!xsel --output --clipboard<ret>'
 map global user -docstring 'paste from system clipboard' p '<a-!>xsel --output --clipboard<ret>'
 
+set global tabstop 2
+set global indentwidth 2
+
 def plug-install -hidden -params 2 %{
     %sh{
         (
