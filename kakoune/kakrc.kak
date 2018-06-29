@@ -100,7 +100,7 @@ plug-colors alexherbo2/kakoune-dracula-theme
 colorscheme desertex
 
 # Language Server
-%sh{kak-lsp --kakoune -s $kak_session}
+%sh{kak-lsp --kakoune -s $kak_session --config $(dirname $kak_source)/kak-lsp.toml}
 lsp-start
 
 
