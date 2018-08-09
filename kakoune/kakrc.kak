@@ -1,10 +1,10 @@
 
 # Enable line numbers
 hook global WinCreate ^[^*]+$ %{
-    add-highlighter window number_lines -hlcursor
-    add-highlighter window show_whitespaces -tab '|' -tabpad '-' -spc ' ' -lf ' '
+    add-highlighter window/ number_lines -hlcursor
+    add-highlighter window/ show_whitespaces -tab '|' -tabpad '-' -spc ' ' -lf ' '
     set-face window Whitespace rgb:333333
-    add-highlighter window show_matching
+    add-highlighter window/ show_matching
     }
 
 # Buffer switching
@@ -30,7 +30,7 @@ set global tabstop 2
 set global indentwidth 2
 
 def plug-install -hidden -params 2 %{
-    %sh{
+    eval %sh{
         (
             set -e
             if [[ ! -d $kak_config/$1 ]]; then
@@ -47,11 +47,13 @@ def plug-install -hidden -params 2 %{
             # Check out the repo to ~/build if it does not exist
             if [[ ! -d ./$name ]]; then
                 git clone $url $name
+            else
+               ( cd ./$name; git pull > /dev/null )
             fi
 
             if [ "$1" = "plugins" ]; then
                 # Source all .kak files in it
-                for file in $(echo ./$name/*.kak); do
+                for file in ./$name/*.kak; do
                     echo source "$PWD/$file"
                 done
             fi
@@ -100,7 +102,5 @@ plug-colors alexherbo2/kakoune-dracula-theme
 colorscheme desertex
 
 # Language Server
-%sh{kak-lsp --kakoune -s $kak_session --config $(dirname $kak_source)/kak-lsp.toml}
-lsp-start
-
+eval %sh{kak-lsp --kakoune -s $kak_session --config $(dirname $kak_source)/kak-lsp.toml}
 
