@@ -1,10 +1,10 @@
 
 # Enable line numbers
 hook global WinCreate ^[^*]+$ %{
-    add-highlighter window/ number_lines -hlcursor
-    add-highlighter window/ show_whitespaces -tab '|' -tabpad '-' -spc ' ' -lf ' '
+    add-highlighter window/ number-lines -hlcursor
+    add-highlighter window/ show-whitespaces -tab '|' -tabpad '-' -spc ' ' -lf ' '
     set-face window Whitespace rgb:333333
-    add-highlighter window/ show_matching
+    add-highlighter window/ show-matching
     }
 
 # Buffer switching
