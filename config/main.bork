@@ -1,1 +1,3 @@
+register types/filesection.sh
 
+ok filesection ~/.kakrc ../kakoune/kakrc.kak --start="#bork managed" --end="#end bork managed" --ifmissing=append
