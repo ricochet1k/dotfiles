@@ -11,6 +11,11 @@ extensions = ["rs"]
 roots = ["Cargo.toml"]
 command = "rls"
 
+[language.dart]
+extensions = ["dart"]
+roots = ["Cargo.toml"]
+command = "dart_language_server"
+
 [language.javascript]
 extensions = ["js", "jsx"]
 roots = ["package.json"]
