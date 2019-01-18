@@ -13,6 +13,6 @@ fi
 type fd || cargo install fd-find
 type exa || cargo install exa
 type rg || cargo install ripgrep
-
-cargo install --force --git https://github.com/ul/kak-lsp
+type sk || cargo install skim
+type broot || cargo install --git https://github.com/Canop/broot
 
