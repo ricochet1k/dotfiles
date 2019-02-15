@@ -4,6 +4,11 @@ cd $(dirname "$0")
 
 [ -d external ] || mkdir -p external
 [ -d external/bork ] || (cd external; git clone https://github.com/mattly/bork)
+[ -d external/kakoune ] || (
+  cd external
+  git clone https://github.com/mawww/kakoune
+  ./opt/bin/update_kakoune.sh
+)
 
 if ! type rustup ; then
   curl https://sh.rustup.rs -sSf | sh

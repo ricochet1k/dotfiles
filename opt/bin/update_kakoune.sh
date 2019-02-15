@@ -1,9 +1,9 @@
 #!/bin/sh
 
-HERE=$(dirname $0)
+HERE=$(realpath $(dirname $0))
 OPT=$HERE/..
 
-cd $OPT/../kakoune
+cd $OPT/../external/kakoune
 git pull
 cd src
 env PREFIX=$OPT make debug=no -j4 install
