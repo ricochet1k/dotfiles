@@ -6,5 +6,5 @@ OPT=$HERE/..
 cd $OPT/../external/kakoune
 git pull
 cd src
-env PREFIX=$OPT make debug=no -j4 install
+env PREFIX=$OPT make debug=no -j$(nproc) install
 

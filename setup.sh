@@ -6,8 +6,9 @@ cd $(dirname "$0")
 [ -d external/kakoune ] || (
   cd external
   git clone https://github.com/mawww/kakoune
-  ./opt/bin/update_kakoune.sh
 )
+
+./opt/bin/update_kakoune.sh
 
 if ! type rustup ; then
   curl https://sh.rustup.rs -sSf | sh
