@@ -34,7 +34,7 @@ nop %sh{
     mkdir -p $kak_config/plugins/
     git clone https://github.com/andreyorst/plug.kak.git ~/.config/kak/plugins/plug.kak
     cd ~/.config/kak/plugins/plug.kak
-    git checkout kakoune-git
+    git checkout dev
   fi
 }
 
@@ -71,7 +71,7 @@ EOF
 }
 
 
-plug "andreyorst/plug.kak" branch "kakoune-git" noload
+plug "andreyorst/plug.kak" branch "dev" noload
 plug Delapouite/kakoune-expand-region
 plug Delapouite/kakoune-buffers
 plug https://gitlab.com/Screwtapello/kakoune-cargo
