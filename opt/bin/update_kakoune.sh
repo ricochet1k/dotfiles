@@ -1,11 +1,24 @@
 #!/bin/sh
 
 HERE=$(realpath $(dirname $0))
-OPT=$HERE/..
+DOTFILES=$HERE/../..
 
-cd $OPT/../external/kakoune
+cd $DOTFILES/external/kakoune
 git pull
 cd src
 rm -r $OPT/share/kak
-env PREFIX=$OPT make debug=no -j$(nproc) install
+env PREFIX=$DOTFILES/opt make debug=no -j$(nproc) install
+
+if [ -n "$XDG_CONFIG_HOME" ]; then
+  KAK_CONFIG="$XDG_CONFIG_HOME/kak"
+else
+  KAK_CONFIG="$HOME/.config/kak"
+fi
+
+echo "KAK_CONFIG: $KAK_CONFIG"
+
+if [ -d $KAK_CONFIG/ ]; then
+  rm -r $KAK_CONFIG/autoload
+  ln -s $DOTFILES/kakoune/autoload $KAK_CONFIG/autoload
+fi
 
