@@ -70,6 +70,10 @@ EOF
   }
 }
 
+define-command debug-kak-lsp %{
+  nop %sh{ ( kak-lsp -s $kak_session -vvv ) > /tmp/kak-lsp.log 2>&1 < /dev/null & }
+}
+
 
 plug "andreyorst/plug.kak" branch "dev" noload
 plug Delapouite/kakoune-expand-region
@@ -79,6 +83,7 @@ plug andreyorst/fzf.kak
 #plug-colors alexherbo2/kakoune-dracula-theme
 plug "ul/kak-lsp" noload do %{ cargo build --release } %{
   eval %sh{ kak-lsp --kakoune -s $kak_session --config $(dirname $kak_source)/kak-lsp.toml }
+  debug-kak-lsp
   lsp-enable
   lsp-auto-hover-enable
   #set global lsp_hover_anchor true
@@ -86,3 +91,4 @@ plug "ul/kak-lsp" noload do %{ cargo build --release } %{
 }
 
 colorscheme desertex
+

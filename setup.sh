@@ -19,5 +19,8 @@ type fd || cargo install fd-find
 type exa || cargo install exa
 type rg || cargo install ripgrep
 type sk || cargo install skim
-type broot || cargo install --git https://github.com/Canop/broot
+type sd || cargo install sd
+type bat || cargo install bat
+type cargo-add || cargo install cargo-edit
+#type broot || cargo install --git https://github.com/Canop/broot
 
