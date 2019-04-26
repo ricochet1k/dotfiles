@@ -42,8 +42,27 @@ source "%val{config}/plugins/plug.kak/rc/plug.kak"
 map global user -docstring 'open file' e ':skim-edit<ret>'
 
 define-command -hidden skim-edit %{
-  #echo -debug "echo ""edit $(sk)"" | kak -p %val{session}"
-  tmux-terminal-vertical sh -c "echo ""eval -client %val{client} \""edit $(sk --reverse)\"""" | kak -p %val{session}"
+  tmux-terminal-impl2 'split-window -v' sh -c "echo eval -client %val{client} \""edit $(sk --reverse -c 'fd -t f')\"" | kak -p %val{session}"
+}
+
+# until my PR gets merged
+define-command -hidden -params 2.. tmux-terminal-impl2 %{
+    evaluate-commands %sh{
+        tmux=${kak_client_env_TMUX:-$TMUX}
+        if [ -z "$tmux" ]; then
+            echo "fail 'This command is only available in a tmux session'"
+            exit
+        fi
+        tmux_args="$1"
+        shift
+        (
+          TMUX=$tmux tmux $tmux_args "env TMPDIR=$TMPDIR ${*@Q} >> /tmp/log.log" < /dev/null 2>&1
+        ) | (
+          while read line; do
+            echo "echo -debug TMUX: ${line@Q}"
+          done
+        )
+    }
 }
 
 define-command -hidden broot-edit %{
@@ -70,9 +89,55 @@ EOF
   }
 }
 
-define-command debug-kak-lsp %{
-  nop %sh{ ( kak-lsp -s $kak_session -vvv ) > /tmp/kak-lsp.log 2>&1 < /dev/null & }
+declare-option -hidden str powerline_sep '' # options:    
+declare-option -hidden str powerline_sep_thin '' # thin:     
+declare-option -hidden str-list powerline_colors 
+declare-option -hidden str-list powerline_format 
+
+define-command -hidden -params 2 powerline-segment %{
+  set -add global powerline_colors %arg{1}
+  set -add global powerline_format %arg{2}
 }
+
+powerline-segment 'black,yellow' '%val{bufname}'
+powerline-segment 'black,bright-blue' '%val{cursor_line}:%val{cursor_char_column}'
+
+hook -group powerline global GlobalSetOption powerline_.* %{
+  powerline_render
+}
+
+define-command -hidden powerline_render %{
+  evaluate-commands %sh{
+    eval set -- "$kak_opt_powerline_colors" ; colors=( "$@" )
+    eval set -- "$kak_opt_powerline_format" ; format=( "$@" )
+
+    modeline=''
+    prev_bg='black'
+    for i in "${!colors[@]}"; do
+      col="${colors[$i]}"
+      fg="${col%%,*}"
+      bg="${col#*,}"
+      if [[ "$bg" == *+* ]]; then
+        col=$bg
+        bg="${col%%+*}"
+        attrs="+${col#*+}"
+      fi
+      if [[ "$bg" == "$prev_bg" ]]; then
+        modeline="$modeline {$fg,$bg}$kak_opt_powerline_sep_thin{$fg,$bg$attrs} ${format[$i]} "
+      else
+        modeline="$modeline {$bg,$prev_bg}$kak_opt_powerline_sep{$fg,$bg$attrs} ${format[$i]} "
+      fi
+      prev_bg=$bg
+    done
+
+    echo "set global modelinefmt '$modeline'"
+  }
+}
+
+powerline_render
+
+
+#set global modelinefmt '%val{bufname} %val{cursor_line}:%val{cursor_char_column} {{context_info}} {{mode_info}} - %val{client}@[%val{session}]'
 
 
 plug "andreyorst/plug.kak" branch "dev" noload
@@ -83,7 +148,8 @@ plug andreyorst/fzf.kak
 #plug-colors alexherbo2/kakoune-dracula-theme
 plug "ul/kak-lsp" noload do %{ cargo build --release } %{
   eval %sh{ kak-lsp --kakoune -s $kak_session --config $(dirname $kak_source)/kak-lsp.toml }
-  debug-kak-lsp
+  #debug mode
+  nop %sh{ ( kak-lsp -s $kak_session -vvv ) > /tmp/kak-lsp.log 2>&1 < /dev/null & }
   lsp-enable
   lsp-auto-hover-enable
   #set global lsp_hover_anchor true
