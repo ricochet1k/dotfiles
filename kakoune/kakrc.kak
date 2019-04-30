@@ -40,29 +40,14 @@ nop %sh{
 
 source "%val{config}/plugins/plug.kak/rc/plug.kak"
 map global user -docstring 'open file' e ':skim-edit<ret>'
+map global user -docstring 'find and open file' f ':skim-find<ret>'
 
 define-command -hidden skim-edit %{
-  tmux-terminal-impl2 'split-window -v' sh -c "echo eval -client %val{client} \""edit $(sk --reverse -c 'fd -t f')\"" | kak -p %val{session}"
+  tmux-terminal-vertical sh -c "echo eval -client %val{client} ""edit $(sk --reverse -c 'fd -t f')"" | kak -p %val{session}"
 }
 
-# until my PR gets merged
-define-command -hidden -params 2.. tmux-terminal-impl2 %{
-    evaluate-commands %sh{
-        tmux=${kak_client_env_TMUX:-$TMUX}
-        if [ -z "$tmux" ]; then
-            echo "fail 'This command is only available in a tmux session'"
-            exit
-        fi
-        tmux_args="$1"
-        shift
-        (
-          TMUX=$tmux tmux $tmux_args "env TMPDIR=$TMPDIR ${*@Q} >> /tmp/log.log" < /dev/null 2>&1
-        ) | (
-          while read line; do
-            echo "echo -debug TMUX: ${line@Q}"
-          done
-        )
-    }
+define-command -hidden skim-find %{
+  tmux-terminal-vertical sh -c "echo eval -client %val{client} ""edit $(sk --ansi -i --reverse -c 'rg --color=always --line-number {}' | cut -d: -f1,2 --output-delimiter=' ')"" | kak -p %val{session}"
 }
 
 define-command -hidden broot-edit %{
@@ -101,6 +86,8 @@ define-command -hidden -params 2 powerline-segment %{
 
 powerline-segment 'black,yellow' '%val{bufname}'
 powerline-segment 'black,bright-blue' '%val{cursor_line}:%val{cursor_char_column}'
+powerline-segment 'black,default' '{{context_info}}'
+powerline-segment 'black,default' '{{mode_info}}'
 
 hook -group powerline global GlobalSetOption powerline_.* %{
   powerline_render
@@ -112,7 +99,7 @@ define-command -hidden powerline_render %{
     eval set -- "$kak_opt_powerline_format" ; format=( "$@" )
 
     modeline=''
-    prev_bg='black'
+    prev_bg='default'
     for i in "${!colors[@]}"; do
       col="${colors[$i]}"
       fg="${col%%,*}"
@@ -149,7 +136,11 @@ plug andreyorst/fzf.kak
 plug "ul/kak-lsp" noload do %{ cargo build --release } %{
   eval %sh{ kak-lsp --kakoune -s $kak_session --config $(dirname $kak_source)/kak-lsp.toml }
   #debug mode
-  nop %sh{ ( kak-lsp -s $kak_session -vvv ) > /tmp/kak-lsp.log 2>&1 < /dev/null & }
+  nop %sh{
+    if [[ $KAK_LSP_DEBUG == 1 ]]; then
+      ( kak-lsp -s $kak_session -vvv ) > /tmp/kak-lsp.log 2>&1 < /dev/null &
+    fi
+  }
   lsp-enable
   lsp-auto-hover-enable
   #set global lsp_hover_anchor true
