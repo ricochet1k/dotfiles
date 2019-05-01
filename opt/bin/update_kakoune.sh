@@ -6,7 +6,8 @@ DOTFILES=$HERE/../..
 cd $DOTFILES/external/kakoune
 git pull
 cd src
-rm -r $OPT/share/kak
+env PREFIX=$DOTFILES/opt make debug=no -j$(nproc)
+rm -r $DOTFILES/opt/share/kak
 env PREFIX=$DOTFILES/opt make debug=no -j$(nproc) install
 
 if [ -n "$XDG_CONFIG_HOME" ]; then

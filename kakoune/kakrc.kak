@@ -132,6 +132,7 @@ plug Delapouite/kakoune-expand-region
 plug Delapouite/kakoune-buffers
 plug https://gitlab.com/Screwtapello/kakoune-cargo
 plug andreyorst/fzf.kak
+plug alexherbo2/auto-pairs.kak
 #plug-colors alexherbo2/kakoune-dracula-theme
 plug "ul/kak-lsp" noload do %{ cargo build --release } %{
   eval %sh{ kak-lsp --kakoune -s $kak_session --config $(dirname $kak_source)/kak-lsp.toml }
