@@ -21,6 +21,7 @@ type rg || cargo install ripgrep
 type sk || cargo install skim
 type sd || cargo install sd
 type bat || cargo install bat
+type watchexec || cargo install watchexec
 type cargo-add || cargo install cargo-edit
-#type broot || cargo install --git https://github.com/Canop/broot
+type broot || cargo install --git https://github.com/Canop/broot
 
