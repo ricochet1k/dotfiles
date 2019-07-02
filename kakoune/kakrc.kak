@@ -49,7 +49,7 @@ plug https://gitlab.com/Screwtapello/kakoune-cargo
 plug andreyorst/fzf.kak
 plug alexherbo2/auto-pairs.kak
 #plug-colors alexherbo2/kakoune-dracula-theme
-plug "ul/kak-lsp" noload do %{ cargo build --release } %{
+plug "ul/kak-lsp" noload do %{ cargo install --force --release --path . } %{
   eval %sh{ kak-lsp --kakoune -s $kak_session --config $(dirname $kak_source)/kak-lsp.toml }
   #debug mode
   nop %sh{
@@ -60,6 +60,7 @@ plug "ul/kak-lsp" noload do %{ cargo build --release } %{
   lsp-enable
   lsp-auto-hover-enable
   #set global lsp_hover_anchor true
+  set global lsp_auto_highlight_references true
   map global user -docstring 'LSP' l ':enter-user-mode lsp<ret>'
 }
 
