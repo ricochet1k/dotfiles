@@ -1,0 +1,8 @@
+session_name: project-$PROJECT
+windows:
+- window_name: $PROJECT
+  layout: "5077,272x63,0,0{136x63,0,0[136x31,0,0,122,136x31,0,32,132],135x63,137,0,125}"
+  panes:
+  - "# top-left"
+  - "# bottom-left"
+  - kak ~/dotfiles/projects/$PROJECT.yaml

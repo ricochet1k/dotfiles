@@ -25,3 +25,5 @@ type watchexec || cargo install watchexec
 type cargo-add || cargo install cargo-edit
 type broot || cargo install --git https://github.com/Canop/broot
 
+type tmuxp || pip install --user tmuxp
+

@@ -1,0 +1,8 @@
+#!/bin/sh
+PROJECT=$(basename $(pwd))
+FILE=~/dotfiles/projects/$PROJECT.yaml
+if [ ! -f $FILE ]; then
+  sed s/\$PROJECT/$PROJECT/g < ~/dotfiles/projects/project_template.yaml > $FILE
+fi
+tmuxp load $FILE
+
